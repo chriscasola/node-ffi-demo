@@ -1,15 +1,20 @@
 var ffi = require('ffi');
-var ref = require('ref');
 var Struct = require('ref-struct');
+
+var RowMetadata = Struct({
+    'data_type': 'string',
+    'group_path': 'string'
+});
 
 var RowStruct = Struct({
     'id': 'int',
-    'name': 'string'
-})
+    'name': 'string',
+    'metadata': RowMetadata
+});
 
 var libUtil = ffi.Library('libmyutil', {
     'double_it': [ 'int', [ 'int' ] ],
-    'print_it': [ 'void', [ RowStruct ]]
+    'print_it': [ RowStruct, [ RowStruct ]]
 });
 
 function testDoubleIt() {
@@ -31,11 +36,18 @@ function testDoubleIt() {
 }
 
 function testPrintIt() {
+    var testRowMeta = new RowMetadata({
+        data_type: 'float',
+        group_path: 'a|b|c'
+    });
+
     var testObject = new RowStruct({
         id: 1,
-        name: 'Row 1'
+        name: 'Row 1',
+        metadata: testRowMeta
     });
-    libUtil.print_it(testObject);
+    var returnedObject = libUtil.print_it(testObject);
+    console.log('\nReturned object:', JSON.stringify(returnedObject));
 }
 
 testPrintIt();

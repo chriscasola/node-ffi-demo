@@ -6,6 +6,21 @@ int double_it(int num) {
     return num * 2;
 }
 
-void print_it(row aRow) {
-    std::cout << aRow.id << "\t" << std::string(aRow.name) << std::endl;
+row print_it(row aRow) {
+    std::cout 
+    << "id: "
+    << aRow.id 
+    << "\n"
+    << "name: " 
+    << std::string(aRow.name) 
+    << "\n"
+    << "metadata:\n"
+    << "  data_type: "
+    << aRow.metadata.data_type
+    << "\n"
+    << "  group_path: "
+    << aRow.metadata.group_path
+    << std::endl;
+
+    return aRow;
 }
